@@ -43,12 +43,17 @@ export default function Account() {
                     onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity
-                    style={{padding: 8}}
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: 8,
+                    }}
                     onPress={() => setHiddenPassword(!hiddenPassword)}
                 >
                     <Octicons
                         name={hiddenPassword ? "eye-closed" : "eye"}
-                        size={32}
+                        size={24}
                         color="gray"
                     />
                 </TouchableOpacity>
@@ -119,11 +124,11 @@ const styles = StyleSheet.create({
     passwordContainer: {
         flexDirection: "row",
 
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
 
         width: "100%",
 
         marginTop: 16,
-    }
+    },
 });
