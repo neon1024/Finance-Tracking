@@ -3,21 +3,49 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
+    useWindowDimensions,
     View,
 } from "react-native";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Octicons } from "@expo/vector-icons";
 
 export default function Account() {
-    const [username, setUsername] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [hiddenPassword, setHiddenPassword] = React.useState(true);
+    const { height, width } = useWindowDimensions();
+
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [hiddenPassword, setHiddenPassword] = useState(true);
+
+    const cardStyles = StyleSheet.create({
+        cardContainer: {
+            position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
+
+            top: "30%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+
+            width: "65%",
+            maxWidth: height * 0.5,
+            minWidth: height * 0.3,
+
+            borderStyle: "solid",
+            borderWidth: 4,
+            borderRadius: 16,
+
+            paddingTop: 16,
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingBottom: 16,
+        },
+    });
 
     return (
-        <View style={styles.cardContainer}>
+        <View style={cardStyles.cardContainer}>
             <Octicons name="person" size={48} color="black" />
             <TextInput
                 style={styles.input}
@@ -66,27 +94,6 @@ export default function Account() {
 }
 
 const styles = StyleSheet.create({
-    cardContainer: {
-        position: "absolute",
-        justifyContent: "center",
-        alignItems: "center",
-
-        top: "30%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-
-        width: "65%",
-
-        borderStyle: "solid",
-        borderWidth: 4,
-        borderRadius: 16,
-
-        paddingTop: 16,
-        paddingLeft: 16,
-        paddingRight: 16,
-        paddingBottom: 16,
-    },
-
     input: {
         borderStyle: "solid",
         borderWidth: 2,
@@ -95,6 +102,7 @@ const styles = StyleSheet.create({
         width: "100%",
 
         marginTop: 16,
+        padding: 8,
     },
 
     inputPassword: {
@@ -103,6 +111,8 @@ const styles = StyleSheet.create({
         borderRadius: 16,
 
         width: "80%",
+
+        padding: 8,
     },
 
     button: {
