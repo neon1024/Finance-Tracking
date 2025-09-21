@@ -8,11 +8,13 @@ export default function RootLayout() {
             <Drawer
                 screenOptions={{
                     swipeEnabled: true,
+
                     drawerItemStyle: { margin: 8 },
                     drawerLabelStyle: {
                         color: "cyan",
                     },
                     drawerActiveBackgroundColor: "black",
+
                     headerStyle: {
                         backgroundColor: "black",
                     },
@@ -23,31 +25,33 @@ export default function RootLayout() {
                 <Drawer.Screen
                     name="index"
                     options={{
-                        title: "Home",
+                        drawerLabel: "Home",
+
+                        headerTitle: "Finance Tracking",
 
                         drawerIcon: ({ size }) => (
                             <Octicons name="home" size={size} color="cyan" />
                         ),
-
-                        headerTitle: "Finance Tracking",
                     }}
                 />
                 <Drawer.Screen
                     name="account"
                     options={{
-                        title: "Account",
+                        drawerLabel: "Account",
+
+                        headerTitle: "Account",
 
                         drawerIcon: ({ size }) => (
                             <Octicons name="person" size={size} color="cyan" />
                         ),
-
-                        headerTitle: "Account",
                     }}
                 />
                 <Drawer.Screen
                     name="income"
                     options={{
-                        title: "Income",
+                        drawerLabel: "Income",
+
+                        headerTitle: "Income",
 
                         drawerIcon: ({ size }) => (
                             <Octicons
@@ -56,14 +60,14 @@ export default function RootLayout() {
                                 color="cyan"
                             />
                         ),
-
-                        headerTitle: "Income",
                     }}
                 />
                 <Drawer.Screen
                     name="expenses"
                     options={{
-                        title: "Expenses",
+                        drawerLabel: "Expenses",
+
+                        headerTitle: "Expenses",
 
                         drawerIcon: ({ size }) => (
                             <Octicons
@@ -72,8 +76,6 @@ export default function RootLayout() {
                                 color="cyan"
                             />
                         ),
-
-                        headerTitle: "Expenses",
                     }}
                 />
                 <Drawer.Screen
