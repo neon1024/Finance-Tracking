@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         color: "cyan",
 
         marginTop: 16,
-
+        
         paddingTop: 8,
         paddingLeft: 16,
         paddingRight: 16,
