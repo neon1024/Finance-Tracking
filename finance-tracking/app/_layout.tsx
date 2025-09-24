@@ -9,6 +9,7 @@ import { TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // TODO custom drawContent function
+// TODO fix the drawer menu items spacing (adjust the padding inside the drawer container)
 
 export default function RootLayout() {
     return (
@@ -149,6 +150,12 @@ export default function RootLayout() {
                 />
                 <Drawer.Screen
                     name="+not-found"
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                    }}
+                />
+                <Drawer.Screen
+                    name="Expense"
                     options={{
                         drawerItemStyle: { display: "none" },
                     }}
