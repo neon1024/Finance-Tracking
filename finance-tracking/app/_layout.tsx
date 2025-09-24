@@ -5,7 +5,7 @@ import {
     DrawerItemList,
 } from "@react-navigation/drawer";
 import { Drawer } from "expo-router/drawer";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // TODO custom drawContent function
@@ -14,10 +14,25 @@ export default function RootLayout() {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Drawer
-                screenOptions={{
+                screenOptions={({ navigation }) => ({
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            onPress={() => navigation.toggleDrawer()}
+                            style={{
+                                paddingHorizontal: 24,
+                            }}
+                        >
+                            <Octicons
+                                name="three-bars"
+                                size={24}
+                                color="cyan"
+                            />
+                        </TouchableOpacity>
+                    ),
+
                     swipeEnabled: true,
 
-                    drawerItemStyle: { margin: 8 },
+                    drawerItemStyle: { marginTop: 12 },
                     drawerLabelStyle: {
                         color: "cyan",
                     },
@@ -28,7 +43,7 @@ export default function RootLayout() {
                     },
                     headerTintColor: "cyan",
                     headerTitleAlign: "center",
-                }}
+                })}
                 drawerContent={(props) => (
                     <DrawerContentScrollView
                         {...props}
@@ -43,13 +58,25 @@ export default function RootLayout() {
                             }}
                         >
                             <View>
+                                <DrawerItem
+                                    label=""
+                                    onPress={() =>
+                                        props.navigation.toggleDrawer()
+                                    }
+                                    icon={({ size }) => (
+                                        <Octicons
+                                            name="x"
+                                            size={size}
+                                            color="cyan"
+                                        />
+                                    )}
+                                />
                                 <DrawerItemList {...props} />
                             </View>
                             <View>
                                 <DrawerItem
                                     label="Logout"
                                     labelStyle={{ color: "red" }}
-                                    style={{ margin: 8 }}
                                     icon={({ size }) => (
                                         <Octicons
                                             name="sign-out"
