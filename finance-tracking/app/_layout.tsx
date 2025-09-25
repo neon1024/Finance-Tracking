@@ -36,6 +36,7 @@ export default function RootLayout() {
                     drawerItemStyle: { marginTop: 12 },
                     drawerLabelStyle: {
                         color: "cyan",
+                        fontSize: 16,
                     },
                     drawerActiveBackgroundColor: "black",
 
@@ -77,7 +78,7 @@ export default function RootLayout() {
                             <View>
                                 <DrawerItem
                                     label="Logout"
-                                    labelStyle={{ color: "red" }}
+                                    labelStyle={{ color: "red", fontSize: 16 }}
                                     icon={({ size }) => (
                                         <Octicons
                                             name="sign-out"
