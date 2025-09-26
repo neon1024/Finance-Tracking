@@ -1,8 +1,16 @@
 import { Octicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { Button, Menu, Provider } from "react-native-paper";
+
 import Expense from "./Expense";
+import PieChart from "./PieChart";
 
 export default function Expenses() {
     const months = [
@@ -26,9 +34,19 @@ export default function Expenses() {
     const openMenu = () => setMenuVisible(true);
     const closeMenu = () => setMenuVisible(false);
 
+    const dummyData = [
+        { category: "food", total: 650 },
+        { category: "bills", total: 1800 },
+        { category: "car", total: 500 },
+        { category: "misc", total: 250 },
+    ];
+
+    let total: number = 0;
+    dummyData.forEach((data) => (total += data.total));
+
     return (
         <Provider>
-            <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.monthPickerAndAddExpenseButtonContainer}>
                     <Menu
                         visible={menuVisible}
@@ -72,19 +90,26 @@ export default function Expenses() {
                     </TouchableOpacity>
                 </View>
 
-                <View>Chart + Total</View>
-                <View>Categories</View>
-                <View>Recent Expenses</View>
-            </View>
+                <View style={visualizationStyles.visualizationContainer}>
+                    <Text style={visualizationStyles.titleText}>Overview</Text>
+                    <PieChart data={dummyData} />
+                    <Text style={visualizationStyles.totalText}>
+                        Total -${total}
+                    </Text>
+                </View>
+
+                <Text>Categories</Text>
+                <Text>Recent Expenses</Text>
+            </ScrollView>
         </Provider>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "flex-start",
+    scrollContainer: {
+        flexGrow: 1,
         alignItems: "center",
+        paddingBottom: 32, // so content isn't cut at bottom
     },
     monthPickerAndAddExpenseButtonContainer: {
         flexDirection: "row",
@@ -94,6 +119,9 @@ const styles = StyleSheet.create({
         marginTop: 16,
         paddingLeft: 16,
         paddingRight: 16,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "blue",
     },
     monthButton: {
         backgroundColor: "black",
@@ -116,5 +144,36 @@ const styles = StyleSheet.create({
     addExpenseButtonText: {
         color: "#fff",
         fontSize: 20,
+    },
+});
+
+const visualizationStyles = StyleSheet.create({
+    visualizationContainer: {
+        width: "100%",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 16,
+
+        paddingLeft: 16,
+        paddingRight: 16,
+
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "blue",
+    },
+
+    titleText: {
+        fontSize: 24,
+        color: "cyan",
+
+        padding: 16,
+    },
+
+    totalText: {
+        fontSize: 24,
+        color: "cyan",
+
+        padding: 16,
     },
 });

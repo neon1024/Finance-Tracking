@@ -161,6 +161,12 @@ export default function RootLayout() {
                         drawerItemStyle: { display: "none" },
                     }}
                 />
+                <Drawer.Screen
+                    name="PieChart"
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                    }}
+                />
             </Drawer>
         </GestureHandlerRootView>
     );
