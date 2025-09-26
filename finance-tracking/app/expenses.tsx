@@ -1,65 +1,82 @@
-import { Picker } from "@react-native-picker/picker";
-import {
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
-
 import { Octicons } from "@expo/vector-icons";
-
 import { useState } from "react";
-
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, Menu, Provider } from "react-native-paper";
 import Expense from "./Expense";
-
-// TODO use FlashList for better performance
 
 export default function Expenses() {
     const months = [
-        { label: "January", value: 1 },
-        { label: "February", value: 2 },
-        { label: "March", value: 3 },
-        { label: "April", value: 4 },
-        { label: "May", value: 5 },
-        { label: "June", value: 6 },
-        { label: "July", value: 7 },
-        { label: "August", value: 8 },
-        { label: "September", value: 9 },
-        { label: "October", value: 10 },
-        { label: "November", value: 11 },
-        { label: "December", value: 12 },
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     ];
 
-    const [month, setMonth] = useState(0);
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+
+    const openMenu = () => setMenuVisible(true);
+    const closeMenu = () => setMenuVisible(false);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.monthPickerAndAddExpenseButtonContainer}>
-                <Picker
-                    style={styles.monthPicker}
-                    selectedValue={month}
-                    onValueChange={(selectedMonth) => setMonth(selectedMonth)}
-                >
-                    <Picker.Item label="Month" value={0} />
-                    {months.map((month) => (
-                        <Picker.Item
-                            key={month.value}
-                            label={month.label}
-                            value={month.value}
-                        />
-                    ))}
-                </Picker>
-                <TouchableOpacity style={styles.addExpenseButtonContainer}>
-                    <Octicons name="plus" size={24} color="#fff" />
-                    <Text style={styles.addExpenseButtonText}>Add Expense</Text>
-                </TouchableOpacity>
-            </View>
+        <Provider>
+            <View style={styles.container}>
+                <View style={styles.monthPickerAndAddExpenseButtonContainer}>
+                    <Menu
+                        visible={menuVisible}
+                        onDismiss={closeMenu}
+                        anchor={
+                            <Button
+                                mode="outlined"
+                                onPress={openMenu}
+                                style={styles.monthButton}
+                                textColor="cyan"
+                            >
+                                {selectedMonth || "Month"}
+                            </Button>
+                        }
+                        contentStyle={{
+                            backgroundColor: "black",
+                            borderStyle: "solid",
+                            borderWidth: 1,
+                            borderRadius: 16,
+                            borderColor: "cyan",
+                        }}
+                    >
+                        {months.map((month) => (
+                            <Menu.Item
+                                key={month}
+                                onPress={() => {
+                                    setSelectedMonth(month);
+                                    closeMenu();
+                                }}
+                                title={month}
+                                titleStyle={{ color: "cyan" }}
+                            />
+                        ))}
+                    </Menu>
 
-            <View>Chart + Total</View>
-            <View>Categories</View>
-            <View>Recent Expenses</View>
-        </View>
+                    <TouchableOpacity style={styles.addExpenseButtonContainer}>
+                        <Octicons name="plus" size={24} color="#fff" />
+                        <Text style={styles.addExpenseButtonText}>
+                            Add Expense
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View>Chart + Total</View>
+                <View>Categories</View>
+                <View>Recent Expenses</View>
+            </View>
+        </Provider>
     );
 }
 
@@ -69,43 +86,35 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
     },
-
-    monthPicker: {
-        borderRadius: 16,
-
-        padding: 8,
-
-        backgroundColor: "black",
-
-        color: "cyan",
-    },
-
     monthPickerAndAddExpenseButtonContainer: {
         flexDirection: "row",
-
         justifyContent: "space-between",
         alignItems: "center",
-
-        width: "90%",
-
-        marginTop: 24,
+        width: "100%",
+        marginTop: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
     },
-
-    addExpenseButtonContainer: {
-        width: 200,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-
+    monthButton: {
+        backgroundColor: "black",
+        borderColor: "cyan",
         borderRadius: 16,
-
-        backgroundColor: "cyan",
-
-        padding: 8,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        minWidth: 150,
     },
-
+    addExpenseButtonContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "cyan",
+        borderRadius: 16,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        minWidth: 180,
+        justifyContent: "space-between",
+    },
     addExpenseButtonText: {
-        fontSize: 24,
         color: "#fff",
+        fontSize: 20,
     },
 });
