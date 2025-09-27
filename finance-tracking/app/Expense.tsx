@@ -1,23 +1,23 @@
 export default class Expense {
     private name: string;
     private description?: string;
-    private type?: string;
+    private category?: string;
     private cost: number;
 
     constructor({
         name,
         description = "",
-        type = "",
+        category = "",
         cost,
     }: {
         name: string;
         description?: string;
-        type?: string;
+        category?: string;
         cost: number;
     }) {
         this.name = name;
         this.description = description;
-        this.type = type;
+        this.category = category;
         this.cost = cost;
     }
 
@@ -37,12 +37,12 @@ export default class Expense {
         this.description = newDescription;
     }
 
-    getType(): string {
-        return this.type || "";
+    getCategory(): string {
+        return this.category || "";
     }
 
-    setType(newType: string) {
-        this.type = newType;
+    setCategory(newCategory: string) {
+        this.category = newCategory;
     }
 
     getCost(): number {

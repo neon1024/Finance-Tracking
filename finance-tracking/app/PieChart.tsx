@@ -1,13 +1,17 @@
 import { Dimensions, Platform, View } from "react-native";
 
+import Expense from "./Expense";
+
 const VictoryPie =
     Platform.OS === "web"
         ? require("victory").VictoryPie
         : require("victory-native").VictoryPie;
 
 type PieChartProps = {
-    data: { category: string; total: number }[];
+    data: Expense[];
 };
+
+// TODO convert PieChart into a class in order to access its colors to display them in the category section on Expenses page
 
 export default function PieChart({ data }: PieChartProps) {
     const { width } = Dimensions.get("window"); // full screen width
@@ -21,7 +25,10 @@ export default function PieChart({ data }: PieChartProps) {
             }}
         >
             <VictoryPie
-                data={data}
+                data={data.map((item) => ({
+                    category: item.getCategory(),
+                    total: item.getCost(),
+                }))}
                 x="category"
                 y="total"
                 width={width * 0.25}

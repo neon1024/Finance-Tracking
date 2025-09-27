@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { Button, Menu, Provider } from "react-native-paper";
 
+import { FlatList } from "react-native";
+
 import Expense from "./Expense";
 import PieChart from "./PieChart";
 
@@ -35,14 +37,14 @@ export default function Expenses() {
     const closeMenu = () => setMenuVisible(false);
 
     const dummyData = [
-        { category: "food", total: 650 },
-        { category: "bills", total: 1800 },
-        { category: "car", total: 500 },
-        { category: "misc", total: 250 },
+        new Expense({ name: "pizza", category: "food", cost: 650 }),
+        new Expense({ name: "rent", category: "bills", cost: 1800 }),
+        new Expense({ name: "gas", category: "car", cost: 500 }),
+        new Expense({ name: "shoes", category: "misc", cost: 250 }),
     ];
 
     let total: number = 0;
-    dummyData.forEach((data) => (total += data.total));
+    dummyData.forEach((data) => (total += data.getCost()));
 
     return (
         <Provider>
@@ -99,6 +101,17 @@ export default function Expenses() {
                 </View>
 
                 <Text>Categories</Text>
+
+                <View style={categoriesStyles.categoriesContainer}>
+                    <FlatList
+                        data={dummyData}
+                        renderItem={({ item }) => (
+                            <Text>{item.getCategory()}</Text>
+                        )}
+                        keyExtractor={(item) => item.getCategory()}
+                    />
+                </View>
+
                 <Text>Recent Expenses</Text>
             </ScrollView>
         </Provider>
@@ -175,5 +188,17 @@ const visualizationStyles = StyleSheet.create({
         color: "cyan",
 
         padding: 16,
+    },
+});
+
+const categoriesStyles = StyleSheet.create({
+    categoriesContainer: {
+        width: "100%",
+
+        justifyContent: "center",
+        alignItems: "center",
+
+        paddingLeft: 16,
+        paddingRight: 16,
     },
 });
