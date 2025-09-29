@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
                     alignItems: "center",
                 }}
             >
-                <Text style={{fontSize: 16}}>This screen doesn't exist.</Text>
+                <Text style={{ fontSize: 16 }}>This screen doesn't exist.</Text>
 
                 <Pressable
                     style={{

@@ -1,19 +1,21 @@
 import { Octicons } from "@expo/vector-icons";
 import { Checkbox } from "expo-checkbox";
 import { useState } from "react";
-import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Button, Menu, Provider } from "react-native-paper";
 
 import { FlatList } from "react-native";
 
-import Expense from "./Expense";
-import PieChart from "./PieChart";
+import Expense from "../../Expense";
+import PieChart from "../../PieChart";
+
+import {
+    categoriesStyles,
+    expensesStyles,
+    monthPickerAndAddExpenseButtonStyles,
+    styles,
+    visualizationStyles,
+} from "./Expenses.styles";
 
 export default function Expenses() {
     const months = [
@@ -53,7 +55,7 @@ export default function Expenses() {
     return (
         <Provider>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.monthPickerAndAddExpenseButtonContainer}>
+                <View style={monthPickerAndAddExpenseButtonStyles.container}>
                     <Menu
                         visible={menuVisible}
                         onDismiss={closeMenu}
@@ -61,7 +63,9 @@ export default function Expenses() {
                             <Button
                                 mode="outlined"
                                 onPress={openMenu}
-                                style={styles.monthButton}
+                                style={
+                                    monthPickerAndAddExpenseButtonStyles.monthButton
+                                }
                                 textColor="cyan"
                             >
                                 {selectedMonth || "Month"}
@@ -88,15 +92,23 @@ export default function Expenses() {
                         ))}
                     </Menu>
 
-                    <TouchableOpacity style={styles.addExpenseButtonContainer}>
+                    <TouchableOpacity
+                        style={
+                            monthPickerAndAddExpenseButtonStyles.addExpenseButtonContainer
+                        }
+                    >
                         <Octicons name="plus" size={24} color="#fff" />
-                        <Text style={styles.addExpenseButtonText}>
+                        <Text
+                            style={
+                                monthPickerAndAddExpenseButtonStyles.addExpenseButtonText
+                            }
+                        >
                             Add Expense
                         </Text>
                     </TouchableOpacity>
                 </View>
 
-                <View style={visualizationStyles.visualizationContainer}>
+                <View style={visualizationStyles.container}>
                     <Text style={visualizationStyles.titleText}>Overview</Text>
                     <PieChart data={dummyData} />
                     <Text style={visualizationStyles.totalText}>
@@ -104,12 +116,12 @@ export default function Expenses() {
                     </Text>
                 </View>
 
-                <View style={categoriesStyles.categoriesContainer}>
+                <View style={categoriesStyles.container}>
                     <FlatList
                         horizontal={true}
                         data={dummyData}
                         renderItem={({ item }) => (
-                            <Text style={categoriesStyles.categoriesItem}>
+                            <Text style={categoriesStyles.item}>
                                 {item.getCategory()}
                             </Text>
                         )}
@@ -117,11 +129,9 @@ export default function Expenses() {
                     />
                 </View>
 
-                <View style={expensesStyles.expensesContainer}>
+                <View style={expensesStyles.container}>
                     <View
-                        style={
-                            expensesStyles.expensesDeleteAndViewAllButtonsContainer
-                        }
+                        style={expensesStyles.deleteAndViewAllButtonsContainer}
                     >
                         <TouchableOpacity style={expensesStyles.deleteButton}>
                             <Octicons name="trash" size={32} color="cyan" />
@@ -141,9 +151,7 @@ export default function Expenses() {
                             const isSelected = selectedExpenses.includes(id);
 
                             return (
-                                <View
-                                    style={expensesStyles.expensesItemContainer}
-                                >
+                                <View style={expensesStyles.itemContainer}>
                                     <Checkbox
                                         value={isSelected}
                                         onValueChange={() => {
@@ -159,13 +167,9 @@ export default function Expenses() {
                                             );
                                         }}
                                         color={isSelected ? "#0ff" : undefined}
-                                        style={
-                                            expensesStyles.expensesItemCheckbox
-                                        }
+                                        style={expensesStyles.itemCheckbox}
                                     />
-                                    <Text
-                                        style={expensesStyles.expensesItemText}
-                                    >
+                                    <Text style={expensesStyles.itemText}>
                                         {item.toString()}
                                     </Text>
                                 </View>
@@ -177,187 +181,3 @@ export default function Expenses() {
         </Provider>
     );
 }
-
-const styles = StyleSheet.create({
-    scrollContainer: {
-        flexGrow: 1,
-        alignItems: "center",
-        paddingBottom: 32, // so content isn't cut at bottom
-    },
-    monthPickerAndAddExpenseButtonContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: "100%",
-        marginTop: 16,
-        paddingLeft: 16,
-        paddingRight: 16,
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "blue",
-    },
-    monthButton: {
-        backgroundColor: "black",
-        borderColor: "cyan",
-        borderRadius: 16,
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        minWidth: 150,
-    },
-    addExpenseButtonContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "cyan",
-        borderRadius: 16,
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        minWidth: 180,
-        justifyContent: "space-between",
-    },
-    addExpenseButtonText: {
-        color: "#fff",
-        fontSize: 20,
-    },
-});
-
-const visualizationStyles = StyleSheet.create({
-    visualizationContainer: {
-        width: "100%",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 16,
-
-        paddingLeft: 16,
-        paddingRight: 16,
-
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "blue",
-    },
-
-    titleText: {
-        fontSize: 24,
-        color: "cyan",
-
-        padding: 16,
-    },
-
-    totalText: {
-        fontSize: 24,
-        color: "cyan",
-
-        padding: 16,
-    },
-});
-
-const categoriesStyles = StyleSheet.create({
-    categoriesContainer: {
-        width: "100%",
-
-        justifyContent: "center",
-        alignItems: "center",
-
-        marginTop: 16,
-
-        paddingLeft: 16,
-        paddingRight: 16,
-
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "blue",
-    },
-
-    categoriesItem: {
-        margin: 8,
-        padding: 16,
-
-        backgroundColor: "black",
-        color: "cyan",
-
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderRadius: 16,
-        borderColor: "cyan",
-    },
-});
-
-const expensesStyles = StyleSheet.create({
-    expensesContainer: {
-        width: "100%",
-
-        justifyContent: "center",
-        alignItems: "center",
-
-        marginTop: 16,
-
-        paddingLeft: 16,
-        paddingRight: 16,
-
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "blue",
-    },
-
-    expensesDeleteAndViewAllButtonsContainer: {
-        width: "100%",
-
-        flexDirection: "row",
-
-        justifyContent: "space-between",
-        alignItems: "center",
-
-        marginTop: 8,
-        marginBottom: 8,
-
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "blue",
-    },
-
-    deleteButton: {
-        backgroundColor: "black",
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "cyan",
-        borderRadius: 16,
-        padding: 8,
-    },
-
-    viewAllButton: {
-        backgroundColor: "black",
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: "cyan",
-        borderRadius: 16,
-        padding: 16,
-        fontSize: 16,
-        color: "cyan",
-    },
-
-    expensesItemContainer: {
-        width: "100%",
-        flexDirection: "row",
-
-        justifyContent: "space-between",
-        alignItems: "center",
-
-        backgroundColor: "black",
-
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderRadius: 16,
-        borderColor: "cyan",
-
-        padding: 16,
-
-        marginBottom: 4,
-    },
-
-    expensesItemCheckbox: {},
-
-    expensesItemText: {
-        color: "cyan",
-        fontSize: 16,
-    },
-});

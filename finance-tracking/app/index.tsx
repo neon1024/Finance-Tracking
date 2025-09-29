@@ -5,7 +5,7 @@ export default function Index() {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>neon1024</Text>
-            <Link href={"/account"} style={styles.accountButton}>Go to Account</Link>
+            <Link href={"/screens/Account/account"} style={styles.accountButton}>Go to Account</Link>
         </View>
     );
 }

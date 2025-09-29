@@ -106,7 +106,7 @@ export default function RootLayout() {
                     }}
                 />
                 <Drawer.Screen
-                    name="account"
+                    name="screens/Account/Account"
                     options={{
                         drawerLabel: "Account",
 
@@ -118,7 +118,7 @@ export default function RootLayout() {
                     }}
                 />
                 <Drawer.Screen
-                    name="income"
+                    name="screens/Income/Income"
                     options={{
                         drawerLabel: "Income",
 
@@ -134,7 +134,7 @@ export default function RootLayout() {
                     }}
                 />
                 <Drawer.Screen
-                    name="expenses"
+                    name="screens/Expenses/Expenses"
                     options={{
                         drawerLabel: "Expenses",
 
