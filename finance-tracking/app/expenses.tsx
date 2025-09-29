@@ -1,4 +1,5 @@
 import { Octicons } from "@expo/vector-icons";
+import { Checkbox } from "expo-checkbox";
 import { useState } from "react";
 import {
     ScrollView,
@@ -36,15 +37,18 @@ export default function Expenses() {
     const openMenu = () => setMenuVisible(true);
     const closeMenu = () => setMenuVisible(false);
 
-    const dummyData = [
+    // keep the data "constant" from re rendering
+    const [dummyData] = useState([
         new Expense({ name: "pizza", category: "food", cost: 650 }),
         new Expense({ name: "rent", category: "bills", cost: 1800 }),
         new Expense({ name: "gas", category: "car", cost: 500 }),
         new Expense({ name: "shoes", category: "misc", cost: 250 }),
-    ];
+    ]);
 
     let total: number = 0;
     dummyData.forEach((data) => (total += data.getCost()));
+
+    const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
 
     return (
         <Provider>
@@ -100,19 +104,75 @@ export default function Expenses() {
                     </Text>
                 </View>
 
-                <Text>Categories</Text>
-
                 <View style={categoriesStyles.categoriesContainer}>
                     <FlatList
+                        horizontal={true}
                         data={dummyData}
                         renderItem={({ item }) => (
-                            <Text>{item.getCategory()}</Text>
+                            <Text style={categoriesStyles.categoriesItem}>
+                                {item.getCategory()}
+                            </Text>
                         )}
-                        keyExtractor={(item) => item.getCategory()}
+                        keyExtractor={(item) => item.getId()}
                     />
                 </View>
 
-                <Text>Recent Expenses</Text>
+                <View style={expensesStyles.expensesContainer}>
+                    <View
+                        style={
+                            expensesStyles.expensesDeleteAndViewAllButtonsContainer
+                        }
+                    >
+                        <TouchableOpacity style={expensesStyles.deleteButton}>
+                            <Octicons name="trash" size={32} color="cyan" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity>
+                            <Text style={expensesStyles.viewAllButton}>
+                                View All
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <FlatList
+                        style={{ width: "100%" }}
+                        data={dummyData}
+                        renderItem={({ item }) => {
+                            const id = item.getId();
+                            const isSelected = selectedExpenses.includes(id);
+
+                            return (
+                                <View
+                                    style={expensesStyles.expensesItemContainer}
+                                >
+                                    <Checkbox
+                                        value={isSelected}
+                                        onValueChange={() => {
+                                            setSelectedExpenses(
+                                                (prev) =>
+                                                    prev.includes(id)
+                                                        ? prev.filter(
+                                                              (selectedId) =>
+                                                                  selectedId !==
+                                                                  id
+                                                          )
+                                                        : [...prev, id] // check
+                                            );
+                                        }}
+                                        color={isSelected ? "#0ff" : undefined}
+                                        style={
+                                            expensesStyles.expensesItemCheckbox
+                                        }
+                                    />
+                                    <Text
+                                        style={expensesStyles.expensesItemText}
+                                    >
+                                        {item.toString()}
+                                    </Text>
+                                </View>
+                            );
+                        }}
+                    />
+                </View>
             </ScrollView>
         </Provider>
     );
@@ -198,7 +258,106 @@ const categoriesStyles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
 
+        marginTop: 16,
+
         paddingLeft: 16,
         paddingRight: 16,
+
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "blue",
+    },
+
+    categoriesItem: {
+        margin: 8,
+        padding: 16,
+
+        backgroundColor: "black",
+        color: "cyan",
+
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderRadius: 16,
+        borderColor: "cyan",
+    },
+});
+
+const expensesStyles = StyleSheet.create({
+    expensesContainer: {
+        width: "100%",
+
+        justifyContent: "center",
+        alignItems: "center",
+
+        marginTop: 16,
+
+        paddingLeft: 16,
+        paddingRight: 16,
+
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "blue",
+    },
+
+    expensesDeleteAndViewAllButtonsContainer: {
+        width: "100%",
+
+        flexDirection: "row",
+
+        justifyContent: "space-between",
+        alignItems: "center",
+
+        marginTop: 8,
+        marginBottom: 8,
+
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "blue",
+    },
+
+    deleteButton: {
+        backgroundColor: "black",
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "cyan",
+        borderRadius: 16,
+        padding: 8,
+    },
+
+    viewAllButton: {
+        backgroundColor: "black",
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "cyan",
+        borderRadius: 16,
+        padding: 16,
+        fontSize: 16,
+        color: "cyan",
+    },
+
+    expensesItemContainer: {
+        width: "100%",
+        flexDirection: "row",
+
+        justifyContent: "space-between",
+        alignItems: "center",
+
+        backgroundColor: "black",
+
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderRadius: 16,
+        borderColor: "cyan",
+
+        padding: 16,
+
+        marginBottom: 4,
+    },
+
+    expensesItemCheckbox: {},
+
+    expensesItemText: {
+        color: "cyan",
+        fontSize: 16,
     },
 });

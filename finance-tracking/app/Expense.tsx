@@ -1,4 +1,7 @@
+import uuid from "react-native-uuid";
+
 export default class Expense {
+    private id: string;
     private name: string;
     private description?: string;
     private category?: string;
@@ -15,10 +18,15 @@ export default class Expense {
         category?: string;
         cost: number;
     }) {
+        this.id = uuid.v4();
         this.name = name;
         this.description = description;
         this.category = category;
         this.cost = cost;
+    }
+
+    getId(): string {
+        return this.id;
     }
 
     getName(): string {
