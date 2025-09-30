@@ -24,6 +24,8 @@ import {
     visualizationStyles,
 } from "./Expenses.styles";
 
+import { Picker } from "@react-native-picker/picker";
+
 export default function Expenses() {
     const months = [
         "January",
@@ -65,6 +67,8 @@ export default function Expenses() {
     const [expenseName, setExpenseName] = useState("");
     const [expenseDescription, setExpenseDescription] = useState("");
     const [expenseCost, setExpenseCost] = useState("");
+
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     return (
         <Provider>
@@ -175,7 +179,54 @@ export default function Expenses() {
                                         setExpenseDescription(text)
                                     }
                                 />
-                                <View>Category</View>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+
+                                        width: "100%",
+
+                                        margin: 4,
+
+                                        paddingTop: 4,
+                                        paddingBottom: 4,
+                                        paddingLeft: 8,
+                                        paddingRight: 8,
+                                    }}
+                                >
+                                    <Text>Category</Text>
+
+                                    <Picker
+                                        selectedValue={selectedCategory}
+                                        onValueChange={(category) =>
+                                            setSelectedCategory(category)
+                                        }
+                                        style={{
+                                            color: "cyan",
+                                            backgroundColor: "#000",
+                                            borderRadius: 16,
+
+                                            paddingTop: 4,
+                                            paddingBottom: 4,
+                                            paddingLeft: 8,
+                                            paddingRight: 8,
+                                        }}
+                                    >
+                                        {dummyData.map((expense) => {
+                                            const category =
+                                                expense.getCategory();
+                                            return (
+                                                <Picker.Item
+                                                    key={category}
+                                                    label={category}
+                                                    value={category}
+                                                />
+                                            );
+                                        })}
+                                    </Picker>
+                                </View>
+
                                 <TextInput
                                     style={addExpenseModalStyles.input}
                                     placeholder="Cost"
