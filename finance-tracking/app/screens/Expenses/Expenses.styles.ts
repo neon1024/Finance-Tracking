@@ -62,7 +62,7 @@ export const addExpenseModalStyles = StyleSheet.create({
         backgroundColor: "#fff",
 
         width: "80%",
-        maxWidth: 350,
+        maxWidth: 360,
 
         borderRadius: 16,
     },

@@ -234,7 +234,9 @@ export default function Expenses() {
                                     onChangeText={(text) => {
                                         // only allow numbers or empty string
                                         if (
-                                            /^(0|[1-9]\d*)?$/.test(text) ||
+                                            /^(0|[1-9]\d*)(\.\d*)?$/.test(
+                                                text
+                                            ) ||
                                             text === ""
                                         ) {
                                             setExpenseCost(text);
