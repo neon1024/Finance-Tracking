@@ -2,8 +2,10 @@ import { Dimensions, Platform, View } from "react-native";
 
 import Expense from "./Expense";
 
+const platform = Platform.OS;
+
 const VictoryPie =
-    Platform.OS === "web"
+    platform === "web"
         ? require("victory").VictoryPie
         : require("victory-native").VictoryPie;
 
@@ -31,8 +33,8 @@ export default function PieChart({ data }: PieChartProps) {
                 }))}
                 x="category"
                 y="total"
-                width={width * 0.25}
-                height={width * 0.25}
+                width={platform === "web" ? width * 0.25 : width * 0.5}
+                height={platform === "web" ? width * 0.25 : width * 0.5}
                 colorScale={["#00ffff", "#ff007f", "#ffbf00", "#00ff7f"]}
                 innerRadius={50} // donut effect
                 labelRadius={80}

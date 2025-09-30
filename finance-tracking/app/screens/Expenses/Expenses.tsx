@@ -1,15 +1,22 @@
 import { Octicons } from "@expo/vector-icons";
 import { Checkbox } from "expo-checkbox";
 import { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { Button, Menu, Provider } from "react-native-paper";
 
-import { FlatList } from "react-native";
+import { FlatList, Modal } from "react-native";
 
 import Expense from "../../Expense";
 import PieChart from "../../PieChart";
 
 import {
+    addExpenseModalStyles,
     categoriesStyles,
     expensesStyles,
     monthPickerAndAddExpenseButtonStyles,
@@ -51,6 +58,13 @@ export default function Expenses() {
     dummyData.forEach((data) => (total += data.getCost()));
 
     const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
+
+    const [addExpenseModalVisibility, setAddExpenseModalVisibility] =
+        useState(false);
+
+    const [expenseName, setExpenseName] = useState("");
+    const [expenseDescription, setExpenseDescription] = useState("");
+    const [expenseCost, setExpenseCost] = useState("");
 
     return (
         <Provider>
@@ -96,6 +110,7 @@ export default function Expenses() {
                         style={
                             monthPickerAndAddExpenseButtonStyles.addExpenseButtonContainer
                         }
+                        onPress={() => setAddExpenseModalVisibility(true)}
                     >
                         <Octicons name="plus" size={24} color="#fff" />
                         <Text
@@ -107,6 +122,83 @@ export default function Expenses() {
                         </Text>
                     </TouchableOpacity>
                 </View>
+
+                <Modal
+                    visible={addExpenseModalVisibility}
+                    animationType="fade"
+                    transparent={true}
+                    onRequestClose={() => setAddExpenseModalVisibility(false)}
+                >
+                    <View style={addExpenseModalStyles.overlay}>
+                        <View style={addExpenseModalStyles.container}>
+                            <View
+                                style={
+                                    addExpenseModalStyles.closeButtonContainer
+                                }
+                            >
+                                <TouchableOpacity
+                                    style={addExpenseModalStyles.closeButton}
+                                    onPress={() =>
+                                        setAddExpenseModalVisibility(false)
+                                    }
+                                >
+                                    <Octicons
+                                        name={"x"}
+                                        size={24}
+                                        color="cyan"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={addExpenseModalStyles.formContainer}>
+                                <View style={addExpenseModalStyles.title}>Add Expense</View>
+
+                                <TextInput
+                                    style={addExpenseModalStyles.input}
+                                    placeholder="Name"
+                                    value={expenseName}
+                                    onChangeText={(text) =>
+                                        setExpenseName(text)
+                                    }
+                                />
+                                <TextInput
+                                    style={addExpenseModalStyles.input}
+                                    placeholder="Description"
+                                    value={expenseDescription}
+                                    onChangeText={(text) =>
+                                        setExpenseDescription(text)
+                                    }
+                                />
+                                <View>Category</View>
+                                <TextInput
+                                    style={addExpenseModalStyles.input}
+                                    placeholder="Cost"
+                                    value={expenseCost}
+                                    onChangeText={(text) => {
+                                        // only allow numbers or empty string
+                                        if (
+                                            /^(0|[1-9]\d*)?$/.test(text) ||
+                                            text === ""
+                                        ) {
+                                            setExpenseCost(text);
+                                        }
+                                    }}
+                                    keyboardType="numeric" // shows numeric keyboard on mobile
+                                />
+                            </View>
+
+                            <TouchableOpacity
+                                style={addExpenseModalStyles.addButton}
+                            >
+                                <Text
+                                    style={addExpenseModalStyles.addButtonText}
+                                >
+                                    Add
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
 
                 <View style={visualizationStyles.container}>
                     <Text style={visualizationStyles.titleText}>Overview</Text>

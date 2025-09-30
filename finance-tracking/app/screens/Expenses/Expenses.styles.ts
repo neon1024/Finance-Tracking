@@ -45,6 +45,96 @@ export const monthPickerAndAddExpenseButtonStyles = StyleSheet.create({
     },
 });
 
+export const addExpenseModalStyles = StyleSheet.create({
+    overlay: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)", // dim background
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    container: {
+        justifyContent: "center",
+        alignItems: "center",
+
+        flexDirection: "column",
+
+        backgroundColor: "#fff",
+
+        width: "80%",
+
+        borderRadius: 16,
+    },
+
+    closeButtonContainer: {
+        width: "100%",
+
+        flexDirection: "row",
+
+        justifyContent: "flex-end",
+        alignItems: "center",
+    },
+
+    closeButton: {
+        padding: 16,
+
+        backgroundColor: "black",
+
+        borderRadius: 16,
+
+        marginTop: 16,
+        marginRight: 16,
+    },
+
+    title: {
+        fontSize: 24,
+    },
+
+    formContainer: {
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+
+        borderStyle: "solid",
+        borderRadius: 16,
+        borderWidth: 2,
+        borderColor: "#000",
+
+        padding: 16,
+
+        margin: 16,
+    },
+
+    input: {
+        borderStyle: "solid",
+        borderWidth: 2,
+        borderColor: "#000",
+        borderRadius: 16,
+
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingLeft: 8,
+        paddingRight: 8,
+
+        margin: 4,
+    },
+
+    addButton: {
+        backgroundColor: "#000",
+        borderRadius: 16,
+
+        padding: 16,
+
+        marginBottom: 16,
+    },
+
+    addButtonText: {
+        color: "#0ff",
+
+        fontSize: 16,
+    },
+});
+
 export const visualizationStyles = StyleSheet.create({
     container: {
         width: "100%",
