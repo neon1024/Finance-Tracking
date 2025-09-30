@@ -151,7 +151,13 @@ export default function Expenses() {
                             </View>
 
                             <View style={addExpenseModalStyles.formContainer}>
-                                <View style={addExpenseModalStyles.title}>Add Expense</View>
+                                <View>
+                                    <Text
+                                        style={addExpenseModalStyles.titleText}
+                                    >
+                                        Add Expense
+                                    </Text>
+                                </View>
 
                                 <TextInput
                                     style={addExpenseModalStyles.input}

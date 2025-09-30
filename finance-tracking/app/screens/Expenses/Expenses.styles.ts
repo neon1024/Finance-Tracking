@@ -86,7 +86,7 @@ export const addExpenseModalStyles = StyleSheet.create({
         marginRight: 16,
     },
 
-    title: {
+    titleText: {
         fontSize: 24,
     },
 
