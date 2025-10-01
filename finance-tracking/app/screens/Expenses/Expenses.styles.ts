@@ -103,7 +103,7 @@ export const addExpenseModalStyles = StyleSheet.create({
 
         padding: 16,
 
-        margin: 16,
+        margin: 32,
     },
 
     input: {
