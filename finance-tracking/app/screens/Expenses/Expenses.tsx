@@ -24,10 +24,6 @@ import {
     visualizationStyles,
 } from "./Expenses.styles";
 
-import { Picker } from "@react-native-picker/picker";
-
-import DropDownPicker from "react-native-dropdown-picker";
-
 export default function Expenses() {
     const months = [
         "January",
@@ -44,11 +40,11 @@ export default function Expenses() {
         "December",
     ];
 
-    const [menuVisible, setMenuVisible] = useState(false);
+    const [menuVisibility, setMenuVisibility] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
-    const openMenu = () => setMenuVisible(true);
-    const closeMenu = () => setMenuVisible(false);
+    const openMenu = () => setMenuVisibility(true);
+    const closeMenu = () => setMenuVisibility(false);
 
     // keep the data "constant" from re rendering
     const [dummyData] = useState([
@@ -76,7 +72,7 @@ export default function Expenses() {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={monthPickerAndAddExpenseButtonStyles.container}>
                     <Menu
-                        visible={menuVisible}
+                        visible={menuVisibility}
                         onDismiss={closeMenu}
                         anchor={
                             <Button
