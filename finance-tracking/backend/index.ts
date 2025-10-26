@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
 });
 
 // Expenses
+// TODO add ExpenseService and ExpenseRepository
 const expenses: Expense[] = [];
 expenses.push(new Expense({ name: "Pizza", category: "Food", cost: 15 }));
 

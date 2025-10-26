@@ -1,3 +1,4 @@
+// TODO move models under backend
 import uuid from "react-native-uuid";
 
 export default class Expense {
@@ -27,6 +28,10 @@ export default class Expense {
 
     getId(): string {
         return this.id;
+    }
+
+    setId(newId: string) {
+        this.id = newId;
     }
 
     getName(): string {
