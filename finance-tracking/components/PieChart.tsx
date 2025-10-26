@@ -1,6 +1,6 @@
 import { Dimensions, Platform, View } from "react-native";
 
-import Expense from "./Expense";
+import Expense from "../models/Expense";
 
 const platform = Platform.OS;
 

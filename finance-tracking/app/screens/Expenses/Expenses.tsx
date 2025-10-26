@@ -12,8 +12,8 @@ import { Button, Menu, Provider } from "react-native-paper";
 
 import { FlatList, Modal } from "react-native";
 
-import Expense from "../../Expense";
-import PieChart from "../../PieChart";
+import PieChart from "../../../components/PieChart";
+import Expense from "../../../models/Expense";
 
 import {
     addExpenseModalStyles,
