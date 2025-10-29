@@ -1,11 +1,18 @@
 // TODO move models under backend
 import uuid from "react-native-uuid";
 
+export interface ExpenseData {
+    name: string;
+    description?: string;
+    category: string;
+    cost: number;
+}
+
 export default class Expense {
     private id: string;
     private name: string;
     private description?: string;
-    private category?: string;
+    private category: string;
     private cost: number;
 
     constructor({
@@ -16,7 +23,7 @@ export default class Expense {
     }: {
         name: string;
         description?: string;
-        category?: string;
+        category: string;
         cost: number;
     }) {
         this.id = uuid.v4();

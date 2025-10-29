@@ -16,7 +16,7 @@ export class Repository<
 
         if (!item) {
             console.log(`[!] Item with id ${id} was not found`);
-            return;
+            return null;
         }
 
         return item;
@@ -26,31 +26,18 @@ export class Repository<
         this.data.push(item);
     }
 
-    public updateById(id: string, updatedFields: Partial<T>) {
-        let itemToUpdate = this.data.find((item) => item.getId() == id);
-
-        if (!itemToUpdate) {
-            console.log(`[!] Item with id ${id} not found`);
-            return;
-        }
-
-        const oldId = itemToUpdate.getId();
-
-        Object.assign(itemToUpdate, updatedFields);
-
-        itemToUpdate.setId(oldId);
-    }
-
-    public deleteById(id: string) {
+    public deleteById(id: string): boolean {
         let indexToRemove = this.data.findIndex((item) => item.getId() == id);
 
         if (indexToRemove < 0) {
             console.log(`[!] Item with id ${id} not found`);
-            return;
+            return false;
         }
 
         this.data.splice(indexToRemove, 1);
 
         console.log(`Item with id ${id} was removed successfuly`);
+
+        return true;
     }
 }
