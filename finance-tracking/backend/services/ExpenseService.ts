@@ -15,7 +15,7 @@ export class ExpenseService {
         cost,
     }: {
         name: string;
-        description?: string;
+        description?: string | "";
         category: string;
         cost: number;
     }) {

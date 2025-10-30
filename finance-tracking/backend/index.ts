@@ -52,6 +52,22 @@ app.put("/expenses/:id", (req, res) => {
     }
 });
 
+app.patch("/expenses/:id", (req, res) => {
+    const id = req.params.id;
+    const updatedFields = req.body;
+
+    const expenseWasUpdated = expenseService.updateExpenseById(
+        id,
+        updatedFields
+    );
+
+    if (expenseWasUpdated) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(404);
+    }
+});
+
 app.delete("/expenses/:id", (req, res) => {
     const id = req.params.id;
 
