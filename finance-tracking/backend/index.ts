@@ -4,6 +4,8 @@ import express from "express";
 import { ExpenseRepository } from "./repositories/ExpenseRepository";
 import { ExpenseService } from "./services/ExpenseService";
 
+import Expense from "../models/Expense";
+
 dotenv.config();
 
 const app = express();
@@ -21,6 +23,43 @@ app.get("/", (req, res) => {
 // [ ] move expenses routing to a separate file
 const expenseRepository = new ExpenseRepository();
 const expenseService = new ExpenseService(expenseRepository);
+
+const expense1 = new Expense({
+    name: "Pizza",
+    description: "Lunch",
+    category: "Junk Food",
+    cost: 15,
+});
+const expense2 = new Expense({
+    name: "Gas",
+    description: "98",
+    category: "Car",
+    cost: 50,
+});
+const expense3 = new Expense({
+    name: "Mouse",
+    description: "Logitech Superlight 2",
+    category: "Misc",
+    cost: 125,
+});
+const expense4 = new Expense({
+    name: "Backpack",
+    description: "",
+    category: "Misc",
+    cost: 75,
+});
+const expense5 = new Expense({
+    name: "Rent",
+    description: "November",
+    category: "Bills",
+    cost: 315,
+});
+
+expenseRepository.add(expense1);
+expenseRepository.add(expense2);
+expenseRepository.add(expense3);
+expenseRepository.add(expense4);
+expenseRepository.add(expense5);
 
 app.get("/expenses", (req, res) => {
     res.send(expenseService.getAllExpenses());

@@ -1,6 +1,6 @@
 import { Octicons } from "@expo/vector-icons";
 import { Checkbox } from "expo-checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     ScrollView,
     Text,
@@ -8,12 +8,12 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { Button, Menu, Provider } from "react-native-paper";
+import { Button, List, Menu, Provider } from "react-native-paper";
 
 import { FlatList, Modal } from "react-native";
 
 import PieChart from "../../../components/PieChart";
-import Expense from "../../../models/Expense";
+import Expense, { ExpenseData } from "../../../models/Expense";
 
 import {
     addExpenseModalStyles,
@@ -46,16 +46,47 @@ export default function Expenses() {
     const openMenu = () => setMenuVisibility(true);
     const closeMenu = () => setMenuVisibility(false);
 
-    // keep the data "constant" from re rendering
-    const [dummyData] = useState([
-        new Expense({ name: "pizza", category: "food", cost: 650 }),
-        new Expense({ name: "rent", category: "bills", cost: 1800 }),
-        new Expense({ name: "gas", category: "car", cost: 500 }),
-        new Expense({ name: "shoes", category: "misc", cost: 250 }),
-    ]);
+    const [expenses, setExpenses] = useState<Expense[]>([]);
+    const [expenseCategories, setExpenseCategories] = useState<Set<String>>();
 
-    let total: number = 0;
-    dummyData.forEach((data) => (total += data.getCost()));
+    async function fetchExpenses() {
+        await fetch("http://localhost:3000/expenses", { method: "GET" })
+            .then((response) => response.json())
+            .then((json) => {
+                const fetchedExpenses = json.map(
+                    (expense: any) =>
+                        new Expense({
+                            name: expense.name,
+                            description: expense.description,
+                            category: expense.category,
+                            cost: expense.cost,
+                        })
+                );
+                setExpenses(fetchedExpenses);
+
+                const fetchedExpenseCategories = new Set<String>();
+
+                for (const expense of fetchedExpenses) {
+                    fetchedExpenseCategories.add(expense.getCategory());
+                }
+
+                setExpenseCategories(fetchedExpenseCategories);
+            })
+            .catch((error) => console.log(error));
+    }
+
+    // calls fetchExpenses each time the screen renders
+    useEffect(() => {
+        fetchExpenses();
+    }, []);
+
+    function computeTotalExpensesCost() {
+        let total: number = 0;
+
+        expenses.forEach((expense) => (total += expense.getCost()));
+
+        return total;
+    }
 
     const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
 
@@ -207,6 +238,7 @@ export default function Expenses() {
 
                             <TouchableOpacity
                                 style={addExpenseModalStyles.addButton}
+                                onPress={() => alert("Add")}
                             >
                                 <Text
                                     style={addExpenseModalStyles.addButtonText}
@@ -220,22 +252,20 @@ export default function Expenses() {
 
                 <View style={visualizationStyles.container}>
                     <Text style={visualizationStyles.titleText}>Overview</Text>
-                    <PieChart data={dummyData} />
+                    <PieChart data={expenses} />
                     <Text style={visualizationStyles.totalText}>
-                        Total -${total}
+                        Total -${computeTotalExpensesCost()}
                     </Text>
                 </View>
 
                 <View style={categoriesStyles.container}>
                     <FlatList
                         horizontal={true}
-                        data={dummyData}
+                        data={Array.from(expenseCategories ?? [])}
                         renderItem={({ item }) => (
-                            <Text style={categoriesStyles.item}>
-                                {item.getCategory()}
-                            </Text>
+                            <Text style={categoriesStyles.item}>{item}</Text>
                         )}
-                        keyExtractor={(item) => item.getId()}
+                        keyExtractor={(item, index) => item + " " + index} // ✅ unique key per item
                     />
                 </View>
 
@@ -255,7 +285,7 @@ export default function Expenses() {
                     </View>
                     <FlatList
                         style={{ width: "100%" }}
-                        data={dummyData}
+                        data={expenses}
                         renderItem={({ item }) => {
                             const id = item.getId();
                             const isSelected = selectedExpenses.includes(id);
