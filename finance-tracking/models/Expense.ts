@@ -2,6 +2,7 @@
 import uuid from "react-native-uuid";
 
 export interface ExpenseData {
+    id?: string;
     name: string;
     description?: string;
     category: string;
@@ -16,17 +17,19 @@ export default class Expense {
     private cost: number;
 
     constructor({
+        id,
         name,
         description = "",
         category = "",
         cost,
     }: {
+        id?: string;
         name: string;
         description?: string;
         category: string;
         cost: number;
     }) {
-        this.id = uuid.v4();
+        this.id = id || uuid.v4();
         this.name = name;
         this.description = description;
         this.category = category;

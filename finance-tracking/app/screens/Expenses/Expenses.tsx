@@ -56,6 +56,7 @@ export default function Expenses() {
                 const fetchedExpenses = json.map(
                     (expense: any) =>
                         new Expense({
+                            id: expense.id,
                             name: expense.name,
                             description: expense.description,
                             category: expense.category,
@@ -75,6 +76,23 @@ export default function Expenses() {
             .catch((error) => console.log(error));
     }
 
+    async function addExpense() {
+        await fetch("http://localhost:3000/expenses", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: expenseName,
+                description: expenseDescription,
+                category: expenseCategory,
+                cost: expenseCost,
+            }),
+        }).catch((error) => console.log(error));
+
+        await fetchExpenses();
+    }
+
     // calls fetchExpenses each time the screen renders
     useEffect(() => {
         fetchExpenses();
@@ -89,6 +107,17 @@ export default function Expenses() {
     }
 
     const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
+
+    async function deleteSelectedExpenses() {
+        for (const selectedExpense of selectedExpenses) {
+            await fetch(`http://localhost:3000/expenses/${selectedExpense}`, {
+                method: "DELETE",
+            }).catch((error) => console.log(error));
+        }
+
+        setSelectedExpenses([]);
+        await fetchExpenses();
+    }
 
     const [addExpenseModalVisibility, setAddExpenseModalVisibility] =
         useState(false);
@@ -238,7 +267,7 @@ export default function Expenses() {
 
                             <TouchableOpacity
                                 style={addExpenseModalStyles.addButton}
-                                onPress={() => alert("Add")}
+                                onPress={() => addExpense()}
                             >
                                 <Text
                                     style={addExpenseModalStyles.addButtonText}
@@ -273,7 +302,10 @@ export default function Expenses() {
                     <View
                         style={expensesStyles.deleteAndViewAllButtonsContainer}
                     >
-                        <TouchableOpacity style={expensesStyles.deleteButton}>
+                        <TouchableOpacity
+                            style={expensesStyles.deleteButton}
+                            onPress={() => deleteSelectedExpenses()}
+                        >
                             <Octicons name="trash" size={32} color="cyan" />
                         </TouchableOpacity>
 
