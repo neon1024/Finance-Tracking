@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Dimensions, Platform, View } from "react-native";
 import Expense from "../models/Expense";
 
@@ -11,9 +12,23 @@ type PieChartProps = {
     data: Expense[];
 };
 
-// TODO redo
 export default function PieChart({ data }: PieChartProps) {
-    const { width } = Dimensions.get("window");
+    const [windowWidth, setWindowWidth] = useState(
+        Dimensions.get("window").width
+    );
+
+    useEffect(() => {
+        const subscription = Dimensions.addEventListener(
+            "change",
+            ({ window }) => {
+                setWindowWidth(window.width);
+            }
+        );
+
+        return () => {
+            subscription?.remove(); // ✅ correct way to clean up
+        };
+    }, []);
 
     // Aggregate expenses by category
     const categoryTotals: Record<string, number> = {};
@@ -36,16 +51,14 @@ export default function PieChart({ data }: PieChartProps) {
         "#00fa9a",
     ];
 
-    // Build aggregated data with assigned colors
     const aggregatedData = Object.entries(categoryTotals).map(
         ([category, total], i) => ({
             category,
             total,
-            color: baseColors[i], // assign a color directly
+            color: baseColors[i % baseColors.length],
         })
     );
 
-    // Color scale matches aggregatedData order
     const colorScale = aggregatedData.map((item) => item.color);
 
     return (
@@ -56,8 +69,12 @@ export default function PieChart({ data }: PieChartProps) {
                 data={aggregatedData}
                 x="category"
                 y="total"
-                width={platform === "web" ? width * 0.25 : width * 0.5}
-                height={platform === "web" ? width * 0.25 : width * 0.5}
+                width={
+                    platform === "web" ? windowWidth * 0.25 : windowWidth * 0.5
+                }
+                height={
+                    platform === "web" ? windowWidth * 0.25 : windowWidth * 0.5
+                }
                 colorScale={colorScale}
                 innerRadius={50}
                 labelRadius={80}

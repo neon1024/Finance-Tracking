@@ -12,7 +12,7 @@ import { Button, List, Menu, Provider } from "react-native-paper";
 
 import { FlatList, Modal } from "react-native";
 
-import PieChart from "../../../components/PieChart";
+import { PieChart } from "react-native-gifted-charts";
 import Expense, { ExpenseData } from "../../../models/Expense";
 
 import {
@@ -47,7 +47,13 @@ export default function Expenses() {
     const closeMenu = () => setMenuVisibility(false);
 
     const [expenses, setExpenses] = useState<Expense[]>([]);
-    const [expenseCategories, setExpenseCategories] = useState<Set<String>>();
+    const [expenseCategories, setExpenseCategories] = useState<Set<String>>(
+        new Set()
+    );
+    const [totalExpensesCost, setTotalExpensesCost] = useState<number>(0);
+    const [pieChartData, setPieChartData] = useState<
+        { value: number; text: string }[]
+    >([]);
 
     async function fetchExpenses() {
         await fetch("http://localhost:3000/expenses", { method: "GET" })
@@ -60,18 +66,44 @@ export default function Expenses() {
                             name: expense.name,
                             description: expense.description,
                             category: expense.category,
-                            cost: expense.cost,
+                            cost: Number(expense.cost),
                         })
                 );
                 setExpenses(fetchedExpenses);
 
                 const fetchedExpenseCategories = new Set<String>();
 
+                let totalExpensesCost = 0;
+
                 for (const expense of fetchedExpenses) {
                     fetchedExpenseCategories.add(expense.getCategory());
+                    totalExpensesCost += expense.getCost();
                 }
 
                 setExpenseCategories(fetchedExpenseCategories);
+
+                setTotalExpensesCost(totalExpensesCost);
+
+                const categoryTotals = new Map<string, number>();
+
+                for (const expense of fetchedExpenses) {
+                    const category = expense.getCategory();
+                    const cost = expense.getCost();
+                    categoryTotals.set(
+                        category,
+                        (categoryTotals.get(category) || 0) + cost
+                    );
+                }
+
+                const pieData = Array.from(
+                    categoryTotals,
+                    ([category, value]) => ({
+                        value: Number(value),
+                        text: category,
+                    })
+                );
+
+                setPieChartData(pieData);
             })
             .catch((error) => console.log(error));
     }
@@ -86,25 +118,19 @@ export default function Expenses() {
                 name: expenseName,
                 description: expenseDescription,
                 category: expenseCategory,
-                cost: expenseCost,
+                cost: parseFloat(expenseCost),
             }),
         }).catch((error) => console.log(error));
 
         await fetchExpenses();
+
+        setAddExpenseModalVisibility(false);
     }
 
-    // calls fetchExpenses each time the screen renders
+    // calls fetchExpenses for the first render
     useEffect(() => {
         fetchExpenses();
     }, []);
-
-    function computeTotalExpensesCost() {
-        let total: number = 0;
-
-        expenses.forEach((expense) => (total += expense.getCost()));
-
-        return total;
-    }
 
     const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
 
@@ -281,9 +307,24 @@ export default function Expenses() {
 
                 <View style={visualizationStyles.container}>
                     <Text style={visualizationStyles.titleText}>Overview</Text>
-                    <PieChart data={expenses} />
+
+                    {pieChartData.length > 0 ? (
+                        <PieChart
+                            donut
+                            labelsPosition="onBorder"
+                            showText
+                            textColor="#000"
+                            textSize={16}
+                            data={pieChartData}
+                        />
+                    ) : (
+                        <Text style={visualizationStyles.totalText}>
+                            No expenses yet
+                        </Text>
+                    )}
+
                     <Text style={visualizationStyles.totalText}>
-                        Total -${computeTotalExpensesCost()}
+                        Total ${-totalExpensesCost}
                     </Text>
                 </View>
 
@@ -294,7 +335,7 @@ export default function Expenses() {
                         renderItem={({ item }) => (
                             <Text style={categoriesStyles.item}>{item}</Text>
                         )}
-                        keyExtractor={(item, index) => item + " " + index} // ✅ unique key per item
+                        keyExtractor={(item, index) => item + " " + index}
                     />
                 </View>
 
